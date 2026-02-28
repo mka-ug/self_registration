@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Khuddam • Uganda Self Registration</title>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f2f5f9 0%, #e8ecf2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    /* Ugandan flag colors */
+    :root {
+      --uganda-black: #1C1C1C;
+      --uganda-yellow: #FFD700;
+      --uganda-red: #E50000;
+      --uganda-blue: #003580;
+      --khuddam-gold: #c6a43c;
+    }
+
+    .register-card {
+      max-width: 520px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      overflow: hidden;
+      border: 1px solid rgba(229, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .stripe-black { flex: 1; background: #1C1C1C; }
+    .stripe-yellow { flex: 1; background: #FFD700; }
+    .stripe-red { flex: 1; background: #E50000; }
+    .stripe-black2 { flex: 1; background: #1C1C1C; }
+    .stripe-yellow2 { flex: 1; background: #FFD700; }
+    .stripe-red2 { flex: 1; background: #E50000; }
+
+    /* header */
+    .card-header {
+      background: var(--uganda-blue);
+      padding: 20px 24px 16px;
+      color: white;
+      position: relative;
+      background-image: linear-gradient(135deg, #E5A000 0%, #E50000 100%);
+    }
+
+    .card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #FFD700, #E50000, #1C1C1C, #FFD700);
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    /* Official Logo from GitHub */
+    .logo-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      border: 2px solid #FFD700;
+      overflow: hidden;
+    }
+
+    .logo-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+
+    .logo-text small {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      opacity: 0.9;
+      letter-spacing: 0.3px;
+      color: #FFD700;
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      padding: 8px 14px;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      border: 1px solid rgba(255,215,0,0.3);
+    }
+
+    .badge i {
+      color: #FFD700;
+    }
+
+    .crane-icon {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 0.9rem;
+    }
+
+    /* body */
+    .card-body {
+      padding: 28px 24px 32px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      color: var(--uganda-blue);
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid rgba(229, 0, 0, 0.2);
+      padding-bottom: 8px;
+    }
+
+    .section-title i {
+      color: #E50000;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* profile picture area */
+    .photo-section {
+      background: linear-gradient(135deg, #f8fafd 0%, #f0f4fa 100%);
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 28px;
+      border: 2px dashed #E50000;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .photo-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #1C1C1C, #FFD700, #E50000, #003580);
+    }
+
+    .photo-preview {
+      width: 130px;
+      height: 130px;
+      border-radius: 65px;
+      background: white;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 4px solid white;
+      box-shadow: 0 8px 20px rgba(0,53,128,0.2);
+      position: relative;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-preview i {
+      font-size: 50px;
+      color: #a0b3cc;
+    }
+
+    .photo-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-photo {
+      background: white;
+      border: 1.5px solid var(--uganda-blue);
+      color: var(--uganda-blue);
+      padding: 12px 18px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1 1 auto;
+      justify-content: center;
+    }
+
+    .btn-photo i {
+      color: #E50000;
+    }
+
+    .btn-photo:hover {
+      background: #eef2f6;
+      transform: translateY(-2px);
+    }
+
+    .btn-photo.camera {
+      background: var(--uganda-blue);
+      color: white;
+      border-color: var(--uganda-blue);
+    }
+
+    .btn-photo.camera i {
+      color: #FFD700;
+    }
+
+    .btn-photo:active {
+      transform: scale(0.97);
+    }
+
+    /* camera container */
+    .camera-container {
+      margin-top: 20px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #1a2634;
+      padding: 16px;
+      border: 2px solid #FFD700;
+    }
+
+    #video {
+      width: 100%;
+      border-radius: 16px;
+      background: #2a3440;
+      display: block;
+      border: 2px solid #E50000;
+    }
+
+    .camera-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-capture {
+      background: #FFD700;
+      border: none;
+      color: #1C1C1C;
+      flex: 1;
+      padding: 14px;
+      border-radius: 50px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn-capture:hover {
+      background: #e6c300;
+      transform: translateY(-2px);
+    }
+
+    .btn-cancel-cam {
+      background: #E50000;
+      border: none;
+      color: white;
+      flex: 1;
+      padding: 14px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-cancel-cam:hover {
+      background: #cc0000;
+      transform: translateY(-2px);
+    }
+
+    /* Save button */
+    .save-btn {
+      width: 100%;
+      background-image: linear-gradient(135deg, #E5A000 0%, #E50000 100%);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 10px;
+      border: 1px solid #FFD700;
+    }
+
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(229,0,0,0.3);
+    }
+
+    .save-btn i {
+      color: #FFD700;
+    }
+
+    /* form */
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--uganda-blue);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 16px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      font-size: 1rem;
+      background: white;
+      transition: 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: #E50000;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(229,0,0,0.1);
+    }
+
+    .input-field.error {
+      border-color: #E50000;
+    }
+
+    .input-field:disabled {
+      background: #f0f4fa;
+      opacity: 0.7;
+    }
+
+    .row-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* member id preview */
+    .id-preview {
+      background: linear-gradient(135deg, #fff9e6, #fff2cc);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin: 8px 0 18px;
+      font-size: 0.95rem;
+      color: #1C1C1C;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid #E50000;
+      border-right: 4px solid #FFD700;
+    }
+
+    .id-preview i {
+      font-size: 1.3rem;
+      color: #003580;
+    }
+
+    .id-preview .id-value {
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      color: #E50000;
+    }
+
+    /* age hint */
+    .age-hint {
+      background: linear-gradient(135deg, #e6f0ff, #d9e8ff);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin: 8px 0 18px;
+      font-size: 0.9rem;
+      color: #1C1C1C;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid #FFD700;
+    }
+
+    .age-hint i {
+      font-size: 1.4rem;
+      color: #E50000;
+    }
+
+    /* loading state */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(229,0,0,0.2);
+      border-radius: 50%;
+      border-top-color: #E50000;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* terms */
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin: 24px 0 20px;
+      background: linear-gradient(135deg, #f0f7ff, #e6f0fa);
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid #FFD700;
+    }
+
+    .terms input {
+      width: 22px;
+      height: 22px;
+      accent-color: #E50000;
+      margin-top: 2px;
+    }
+
+    .terms label {
+      font-weight: 400;
+      color: #1C1C1C;
+      margin-bottom: 0;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background-image: linear-gradient(135deg, #E5A000 0%, #E50000 100%);
+      color: white;
+      border: none;
+      padding: 18px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 10px 20px -5px rgba(229,0,0,0.4);
+      border: 1px solid #FFD700;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.97);
+    }
+
+    .submit-btn i {
+      color: #FFD700;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 20px;
+      color: #4a5e7a;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #E50000;
+    }
+
+    .footer-note a {
+      color: #003580;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-note a:hover {
+      text-decoration: underline;
+    }
+
+    /* confirmation modal */
+    .success-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .success-modal.show {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 40px;
+      max-width: 360px;
+      padding: 40px 24px;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+      border: 3px solid #FFD700;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #1C1C1C, #FFD700, #E50000, #003580);
+    }
+
+    .modal-icon {
+      background: #003580;
+      width: 80px;
+      height: 80px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 40px;
+      color: #FFD700;
+      border: 3px solid #E50000;
+    }
+
+    .modal-card h3 {
+      font-size: 1.8rem;
+      color: #003580;
+      margin-bottom: 8px;
+    }
+
+    .modal-card p {
+      color: #1C1C1C;
+    }
+
+    .btn-done {
+      background: #E50000;
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 16px;
+      width: 100%;
+      border-radius: 40px;
+      font-size: 1.1rem;
+      margin-top: 24px;
+      border: 2px solid #FFD700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-done:hover {
+      background: #cc0000;
+      transform: translateY(-2px);
+    }
+
+    /* misc */
+    .hidden {
+      display: none;
+    }
+
+    .uganda-flag-text {
+      display: inline-block;
+      background: linear-gradient(90deg, #1C1C1C, #FFD700, #E50000);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    /* crane icon decoration */
+    .crane-decor {
+      font-size: 1.2rem;
+      margin: 0 4px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    /* photo hint */
+    .photo-hint {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .camera-container {
+      display: none;
+    }
+
+    .camera-container.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-card">
+    <!-- Ugandan flag stripes -->
+    <div class="flag-stripe">
+      <div class="stripe-black"></div>
+      <div class="stripe-yellow"></div>
+      <div class="stripe-red"></div>
+      <div class="stripe-black2"></div>
+      <div class="stripe-yellow2"></div>
+      <div class="stripe-red2"></div>
+    </div>
+
+    <div class="card-header">
+      <div class="logo-wrap">
+        <!-- Official GitHub Avatar as Logo -->
+        <div class="logo-image">
+          <img src="https://avatars.githubusercontent.com/u/214355993?v=4" alt="AMUL Uganda Logo">
+        </div>
+        <div class="logo-text">
+          Khuddam-ul-Ahmadiyya
+          <small>TAJNEED - DEPARTMENT <span class="crane-decor">🦩</span></small>
+        </div>
+      </div>
+      <div class="badge">
+        <i class="fas fa-fingerprint"></i> 
+        New member · register now 
+        <span class="crane-icon">🇺🇬</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <!-- profile picture with capture -->
+      <div class="photo-section">
+        <div class="photo-preview" id="photoPreview">
+          <i class="fas fa-user-circle"></i>
+        </div>
+
+        <div class="photo-actions">
+          <button type="button" class="btn-photo camera" id="openCameraBtn"><i class="fas fa-camera"></i> Take photo</button>
+          <button type="button" class="btn-photo" id="uploadBtn"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" class="hidden">
+
+        <!-- Camera container -->
+        <div class="camera-container" id="cameraContainer">
+          <video id="video" autoplay playsinline></video>
+          <div class="camera-controls">
+            <button type="button" class="btn-capture" id="captureBtn"><i class="fas fa-camera"></i> Take Picture</button>
+            <button type="button" class="btn-cancel-cam" id="closeCameraBtn"><i class="fas fa-times"></i> Cancel</button>
+          </div>
+        </div>
+
+        <!-- Save button for uploaded/captured photo -->
+        <button type="button" class="save-btn" id="savePhotoBtn" style="display: none;">
+          <i class="fas fa-save"></i> ✓ Use This Photo
+        </button>
+        <div class="photo-hint" id="photoHint"></div>
+      </div>
+
+      <!-- registration form -->
+      <form id="regForm">
+        <div class="section-title"><i class="fas fa-user-pen"></i> Personal details</div>
+
+        <div class="input-group">
+          <label>Full name *</label>
+          <input type="text" id="fullName" class="input-field" placeholder="As per ID card" required>
+        </div>
+
+        <div class="row-2col">
+          <div class="input-group">
+            <label>Date of birth *</label>
+            <input type="date" id="dob" class="input-field" required onchange="updateAgeHint()">
+          </div>
+          <div class="input-group">
+            <label>Phone</label>
+            <input type="tel" id="phone" class="input-field" placeholder="07X XXX XXXX">
+          </div>
+        </div>
+
+        <!-- dynamic age hint -->
+        <div class="age-hint" id="ageHint">
+          <i class="fas fa-child"></i>
+          <span id="ageHintText">Enter birth date to see age group</span>
+        </div>
+
+        <div class="input-group">
+          <label>Email (optional)</label>
+          <input type="email" id="email" class="input-field" placeholder="name@example.com">
+        </div>
+
+        <div class="section-title" style="margin-top: 16px;"><i class="fas fa-location-dot"></i> Location & unit</div>
+
+        <div class="row-2col">
+          <div class="input-group">
+            <label>Region *</label>
+            <select id="region" class="input-field" required onchange="loadSubregions()">
+              <option value="">Loading regions...</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Subregion (Qiadat) *</label>
+            <select id="qiadat" class="input-field" required onchange="generateMemberId()" disabled>
+              <option value="">Select region first</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Member ID preview (auto-generated) -->
+        <div class="id-preview" id="memberIdPreview">
+          <i class="fas fa-id-card"></i>
+          <div>
+            <div style="font-size:0.8rem; opacity:0.8;">Your Member ID will be:</div>
+            <span class="id-value" id="memberIdDisplay">----</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Home address</label>
+          <input type="text" id="address" class="input-field" placeholder="Street, city">
+        </div>
+
+        <!-- terms and consent -->
+        <div class="terms">
+          <input type="checkbox" id="consent" required>
+          <label for="consent">I confirm that the information provided is accurate and I agree to abide by the rules of Khuddam-ul-Ahmadiyya Uganda.</label>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn"><i class="fas fa-paper-plane"></i> Register myself 🇺🇬</button>
+      </form>
+      <div class="footer-note">
+        <i class="fas fa-shield-alt"></i> Your data is secure & confidential<br>
+        <i>© <span id="year">2026</span> For Help: <a href="mailto:info@khuddamuganda.org">info@khuddamuganda.org</a></i>
+        <i class="fas fa-crean" style="color: #E50000;"> 🦩</i>
+      </div>
+    </div>
+  </div>
+
+  <!-- success confirmation -->
+  <div class="success-modal" id="successModal">
+    <div class="modal-card">
+      <div class="modal-icon"><i class="fas fa-check"></i></div>
+      <h3>Webale!</h3>
+      <p>You have successfully registered.</p>
+      <p style="font-size:1.2rem; font-weight:700; color:#E50000; margin:10px 0;" id="successMemberId">---</p>
+      <p style="font-size:0.9rem; color:#666;">Your registration is pending approval.</p>
+      <p style="font-size:0.8rem; color:#003580;">🦩 Welcome to Khuddam Uganda 🦩</p>
+      <button class="btn-done" id="doneBtn"><i class="fas fa-thumbs-up"></i> Done</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // === SUPABASE CONFIG ===
+      const SUPABASE_URL = "https://pqrsljahrnjgkadflbmr.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxcnNsamFocm5qZ2thZGZsYm1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1NTg0NTYsImV4cCI6MjA4NjEzNDQ1Nn0.egED0C2iRp6j3Xp4ldgrdI0GBep2J7VUR52rBbzsVdo";
+      
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        db: { schema: 'public' },
+        auth: { persistSession: false }
+      });
+
+      // State
+      let regions = [];
+      let subregions = [];
+      let capturedImageData = null;
+      let generatedMemberId = '';
+      let stream = null; // Camera stream
+
+      // DOM elements
+      const photoPreview = document.getElementById('photoPreview');
+      const openCameraBtn = document.getElementById('openCameraBtn');
+      const cameraContainer = document.getElementById('cameraContainer');
+      const video = document.getElementById('video');
+      const captureBtn = document.getElementById('captureBtn');
+      const closeCameraBtn = document.getElementById('closeCameraBtn');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const fileInput = document.getElementById('fileInput');
+      const savePhotoBtn = document.getElementById('savePhotoBtn');
+      const photoHint = document.getElementById('photoHint');
+      const regionSelect = document.getElementById('region');
+      const qiadatSelect = document.getElementById('qiadat');
+      const submitBtn = document.getElementById('submitBtn');
+      const successModal = document.getElementById('successModal');
+      const doneBtn = document.getElementById('doneBtn');
+      const regForm = document.getElementById('regForm');
+      const memberIdDisplay = document.getElementById('memberIdDisplay');
+      const successMemberId = document.getElementById('successMemberId');
+
+      // Set current year
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // === HELPER: Get prefix from name (first 2 letters uppercase) ===
+      function getPrefixFromName(name) {
+        if (!name) return 'XX';
+        const clean = name.replace(/[^a-zA-Z]/g, '').toUpperCase();
+        return clean.substring(0, 2).padEnd(2, 'X');
+      }
+
+      // === START CAMERA ===
+      async function startCamera() {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: 'user' },
+            audio: false 
+          });
+          video.srcObject = stream;
+          await video.play();
+          return true;
+        } catch (err) {
+          console.error('Camera error:', err);
+          alert('Could not access camera. Please check permissions.');
+          return false;
+        }
+      }
+
+      // === STOP CAMERA ===
+      function stopCamera() {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+          stream = null;
+        }
+        video.srcObject = null;
+      }
+
+      // === CAPTURE PHOTO FROM VIDEO ===
+      function capturePhoto() {
+        if (!video.videoWidth) return null;
+        
+        // Create a canvas element
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        // Draw video frame to canvas
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Convert to data URL
+        return canvas.toDataURL('image/jpeg', 0.9);
+      }
+
+      // === CAMERA BUTTON HANDLER ===
+      openCameraBtn.addEventListener('click', async () => {
+        cameraContainer.classList.add('show');
+        photoHint.textContent = 'Starting camera...';
+        const started = await startCamera();
+        if (started) {
+          photoHint.textContent = 'Camera ready - click "Take Picture" when ready';
+        } else {
+          cameraContainer.classList.remove('show');
+          photoHint.textContent = '';
+        }
+      });
+
+      // === CAPTURE BUTTON HANDLER ===
+      captureBtn.addEventListener('click', () => {
+        const picture = capturePhoto();
+        if (picture) {
+          // Show preview
+          const img = document.createElement('img');
+          img.src = picture;
+          photoPreview.innerHTML = '';
+          photoPreview.appendChild(img);
+          
+          // Store temporarily
+          window.tempImageData = picture;
+          
+          // Stop camera and hide container
+          stopCamera();
+          cameraContainer.classList.remove('show');
+          
+          // Show save button
+          savePhotoBtn.style.display = 'block';
+          photoHint.textContent = 'Click "Use This Photo" to confirm';
+        } else {
+          alert('Could not capture photo. Please try again.');
+        }
+      });
+
+      // === CLOSE CAMERA BUTTON ===
+      closeCameraBtn.addEventListener('click', () => {
+        stopCamera();
+        cameraContainer.classList.remove('show');
+        photoHint.textContent = '';
+      });
+
+      // === UPLOAD BUTTON ===
+      uploadBtn.addEventListener('click', () => fileInput.click());
+      
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          photoPreview.innerHTML = '';
+          photoPreview.appendChild(img);
+          
+          // Store temporarily
+          window.tempImageData = ev.target.result;
+          
+          // Show save button
+          savePhotoBtn.style.display = 'block';
+          photoHint.textContent = 'Click "Use This Photo" to confirm';
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // === SAVE PHOTO BUTTON ===
+      savePhotoBtn.addEventListener('click', () => {
+        if (window.tempImageData) {
+          capturedImageData = window.tempImageData;
+          savePhotoBtn.style.display = 'none';
+          photoHint.textContent = '✓ Photo saved successfully';
+          photoHint.style.color = '#003580';
+          window.tempImageData = null;
+        }
+      });
+
+      // === GENERATE MEMBER ID ===
+      window.generateMemberId = async function() {
+        const regionId = regionSelect.value;
+        const subregionId = qiadatSelect.value;
+        
+        if (!regionId || !subregionId) {
+          memberIdDisplay.textContent = '----';
+          return;
+        }
+
+        try {
+          const region = regions.find(r => r.id === regionId);
+          const subregion = subregions.find(s => s.id === subregionId);
+          
+          if (!region || !subregion) return;
+
+          const regionPrefix = getPrefixFromName(region.name);
+          const subregionPrefix = getPrefixFromName(subregion.name);
+
+          const { data, error } = await supabase
+            .from('members')
+            .select('member_id')
+            .like('member_id', `${regionPrefix}-${subregionPrefix}-%`);
+
+          if (error) throw error;
+
+          const count = data ? data.length : 0;
+          const nextNumber = (count + 1).toString().padStart(4, '0');
+          generatedMemberId = `${regionPrefix}-${subregionPrefix}-${nextNumber}`;
+          
+          memberIdDisplay.textContent = generatedMemberId;
+        } catch (err) {
+          console.error('Error generating member ID:', err);
+          memberIdDisplay.textContent = 'Error';
+        }
+      };
+
+      // === LOAD REGIONS FROM SUPABASE ===
+      async function loadRegions() {
+        try {
+          regionSelect.innerHTML = '<option value="">Loading regions...</option>';
+          
+          const { data, error } = await supabase
+            .from('regions')
+            .select('id, name, code')
+            .eq('active', true)
+            .order('name');
+
+          if (error) throw error;
+
+          regions = data || [];
+          
+          let options = '<option value="">Select region</option>';
+          regions.forEach(r => {
+            options += `<option value="${r.id}">${r.name}</option>`;
+          });
+          
+          regionSelect.innerHTML = options;
+        } catch (err) {
+          console.error('Error loading regions:', err);
+          regionSelect.innerHTML = '<option value="">Error loading regions</option>';
+          alert('Failed to load regions. Please refresh.');
+        }
+      }
+
+      // === LOAD SUBREGIONS BASED ON SELECTED REGION ===
+      window.loadSubregions = async function() {
+        const regionId = regionSelect.value;
+        
+        if (!regionId) {
+          qiadatSelect.innerHTML = '<option value="">Select region first</option>';
+          qiadatSelect.disabled = true;
+          memberIdDisplay.textContent = '----';
+          return;
+        }
+
+        try {
+          qiadatSelect.innerHTML = '<option value="">Loading subregions...</option>';
+          qiadatSelect.disabled = true;
+
+          const { data, error } = await supabase
+            .from('subregions')
+            .select('id, name')
+            .eq('region_id', regionId)
+            .eq('active', true)
+            .order('name');
+
+          if (error) throw error;
+
+          subregions = data || [];
+          
+          let options = '<option value="">Select subregion</option>';
+          subregions.forEach(s => {
+            options += `<option value="${s.id}">${s.name}</option>`;
+          });
+          
+          qiadatSelect.innerHTML = options;
+          qiadatSelect.disabled = false;
+          
+          memberIdDisplay.textContent = '----';
+        } catch (err) {
+          console.error('Error loading subregions:', err);
+          qiadatSelect.innerHTML = '<option value="">Error loading</option>';
+          qiadatSelect.disabled = false;
+        }
+      };
+
+      // === AGE CALCULATION ===
+      window.updateAgeHint = function() {
+        const dob = document.getElementById('dob').value;
+        const hintSpan = document.getElementById('ageHintText');
+        const icon = document.querySelector('#ageHint i');
+        
+        if (!dob) {
+          hintSpan.innerText = 'Enter birth date to see age group';
+          icon.className = 'fas fa-child';
+          return;
+        }
+
+        const birth = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+
+        let group = '', iconClass = '';
+        
+        if (age >= 15 && age < 40) { 
+          group = 'Khuddam (15–40)'; 
+          iconClass = 'fas fa-user-shield';
+        } else if (age >= 7 && age < 15) { 
+          group = 'Atfal (7–14)'; 
+          iconClass = 'fas fa-child';
+        } else if (age >= 40) { 
+          group = 'Ansar (40+)'; 
+          iconClass = 'fas fa-user-tie';
+        } else { 
+          group = 'Below Atfal age'; 
+          iconClass = 'fas fa-baby';
+        }
+
+        hintSpan.innerText = `${age} years · ${group}`;
+        icon.className = iconClass;
+        
+        return age;
+      };
+
+      // === FORM SUBMISSION ===
+      regForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fullName = document.getElementById('fullName').value.trim();
+        const dob = document.getElementById('dob').value;
+        const region = regionSelect.value;
+        const qiadat = qiadatSelect.value;
+        const consent = document.getElementById('consent').checked;
+
+        if (!fullName || !dob || !region || !qiadat || !consent) {
+          alert('Please fill all required fields and accept terms');
+          return;
+        }
+
+        if (!generatedMemberId || generatedMemberId === '----') {
+          alert('Please wait for Member ID to generate');
+          return;
+        }
+
+        if (!capturedImageData) {
+          alert('Please take or upload a photo and click "Use This Photo" to confirm');
+          return;
+        }
+
+        const calculatedAge = updateAgeHint();
+        const isAnsarAge = calculatedAge >= 40;
+        
+        let status = 'Pending';
+        if (calculatedAge >= 40) {
+          status = 'Pending-Ansar';
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Registering...';
+
+        try {
+          const selectedRegion = regions.find(r => r.id === region);
+          const selectedSubregion = subregions.find(s => s.id === qiadat);
+
+          const memberData = {
+            member_id: generatedMemberId,
+            full_name: fullName,
+            dob: dob,
+            date_of_birth: dob,
+            date_joined: new Date().toISOString().split('T')[0],
+            phone: document.getElementById('phone').value || null,
+            email: document.getElementById('email').value || null,
+            address: document.getElementById('address').value || null,
+            region_id: region,
+            region: selectedRegion?.name,
+            qiadat_id: qiadat,
+            subregion_id: qiadat,
+            sub_region: selectedSubregion?.name,
+            calculated_age: calculatedAge,
+            is_ansar_age: isAnsarAge,
+            status: status,
+            registered_via: 'self_portal',
+            profile_picture: capturedImageData,
+            photo_url: capturedImageData,
+            flags: [],
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          };
+
+          const { error } = await supabase
+            .from('members')
+            .insert([memberData]);
+
+          if (error) throw error;
+
+          successMemberId.textContent = generatedMemberId;
+          successModal.classList.add('show');
+
+          regForm.reset();
+          photoPreview.innerHTML = '<i class="fas fa-user-circle"></i>';
+          capturedImageData = null;
+          window.tempImageData = null;
+          generatedMemberId = '';
+          memberIdDisplay.textContent = '----';
+          savePhotoBtn.style.display = 'none';
+          photoHint.textContent = '';
+          document.getElementById('ageHintText').innerText = 'Enter birth date to see age group';
+          document.querySelector('#ageHint i').className = 'fas fa-child';
+          
+          await loadRegions();
+          qiadatSelect.innerHTML = '<option value="">Select region first</option>';
+          qiadatSelect.disabled = true;
+
+        } catch (err) {
+          console.error('Registration error:', err);
+          alert('Registration failed: ' + err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Register myself 🇺🇬';
+        }
+      });
+
+      doneBtn.addEventListener('click', () => {
+        successModal.classList.remove('show');
+      });
+
+      successModal.addEventListener('click', (e) => {
+        if (e.target === successModal) successModal.classList.remove('show');
+      });
+
+      // === INITIALIZATION ===
+      async function init() {
+        await loadRegions();
+      }
+
+      init();
+
+      // Clean up camera on page unload
+      window.addEventListener('beforeunload', () => {
+        stopCamera();
+      });
+
+    })();
+  </script>
+</body>
+</html>self
