@@ -79,39 +79,50 @@
       margin-bottom: 12px;
     }
 
-    /* Official Logo from GitHub */
-    .logo-image {
-      width: 90px;
-      height: 70px;
-      border-radius: 100px;
-      background: rgb(0, 0, 0);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0);
-      border: 2px solid #00000000;
-      overflow: hidden;
-    }
+   /* Official Logo from GitHub */
+.logo-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgb(0, 0, 0);
+  box-shadow: none;
+  border: none;
+  overflow: hidden;
+  flex-shrink: 0; /* Prevents squishing in flex containers */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .logo-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+.logo-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
-    .logo-text {
-      font-weight: 700;
-      font-size: 1.2rem;
-      line-height: 1.2;
-    }
+.logo-text {
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
 
-    .logo-text small {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 400;
-      opacity: 0.9;
-      letter-spacing: 0.3px;
-      color: #ffffff91;
-    }
+.logo-text small {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.9;
+  letter-spacing: 0.3px;
+  color: #ffffff91;
+}
 
+/* Adjust size for smaller screens */
+@media (max-width: 768px) {
+  .logo-image {
+    width: 60px;
+    height: 60px;
+  }
+}
     .badge {
       background: rgba(255,255,255,0.15);
       backdrop-filter: blur(4px);
