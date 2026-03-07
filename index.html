@@ -10,15 +10,15 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f2f5f9 0%, #e8ecf2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
-    :root { --uganda-black: #1C1C1C; --uganda-yellow: #FFD700; --uganda-red: #E50000; --uganda-blue: #003580; --khuddam-gold: #FFD700; }
+    :root { --uganda-black: #1C1C1C; --uganda-yellow: #FFD700; --uganda-red: #000000; --uganda-blue: #000000; --khuddam-gold: #FFD700; }
     .register-card { max-width: 520px; width: 100%; background: white; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
     .flag-stripe { display: flex; height: 6px; }
     .stripe-black { flex: 1; background: #1C1C1C; }
-    .stripe-yellow { flex: 1; background: #FFD700; }
-    .stripe-red { flex: 1; background: #E50000; }
+    .stripe-yellow { flex: 1; background: #000000; }
+    .stripe-red { flex: 1; background: #000000; }
     .stripe-black2 { flex: 1; background: #1C1C1C; }
-    .stripe-yellow2 { flex: 1; background: #FFD700; }
-    .stripe-red2 { flex: 1; background: #E50000; }
+    .stripe-yellow2 { flex: 1; background: #000000; }
+    .stripe-red2 { flex: 1; background: #000000; }
     .card-header { background: var(--uganda-black); padding: 20px 24px 16px; color: white; position: relative; }
     .card-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #FFD700, #E50000, #E50000, #FFD700); }
     .logo-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
@@ -176,7 +176,7 @@
             </div>
             <div class="baiat-type-option">
               <input type="radio" id="baiatEntered" name="baiatType" value="Entered" onchange="toggleBaiatDateField()">
-              <label for="baiatEntered">Entered Ahmadiyyat</label>
+              <label for="baiatEntered">Converted to Ahmadiyyat</label>
             </div>
           </div>
         </div>
