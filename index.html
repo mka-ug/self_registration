@@ -81,6 +81,11 @@
     .btn-done:hover { background: #002855; }
     .hidden { display: none; }
     .photo-hint { font-size: 0.75rem; color: #64748b; margin-top: 6px; font-style: italic; min-height: 1.2em; }
+    /* Bai'at Type Radio Buttons */
+    .baiat-type-group { display: flex; gap: 20px; padding: 10px 0; }
+    .baiat-type-option { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .baiat-type-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--uganda-blue); cursor: pointer; }
+    .baiat-type-option label { font-weight: 500; color: var(--uganda-blue); cursor: pointer; }
     @media (max-width: 480px) { .row-2col { grid-template-columns: 1fr; } .logo-text { font-size: 1rem; } }
   </style>
 </head>
@@ -142,22 +147,16 @@
             <input type="date" id="dob" class="input-field" required onchange="updateAgeHint()">
           </div>
           <div class="input-group">
-            <label>Date of Bai'at</label>
-            <input type="date" id="dateOfBaiat" class="input-field">
+            <label>Phone</label>
+            <input type="tel" id="phone" class="input-field" placeholder="07X XXX XXXX">
           </div>
         </div>
         <div class="age-hint" id="ageHint">
           <i class="fas fa-child"></i><span id="ageHintText">Enter birth date to see age group</span>
         </div>
-        <div class="row-2col">
-          <div class="input-group">
-            <label>Phone</label>
-            <input type="tel" id="phone" class="input-field" placeholder="07X XXX XXXX">
-          </div>
-          <div class="input-group">
-            <label>Email (optional)</label>
-            <input type="email" id="email" class="input-field" placeholder="name@example.com">
-          </div>
+        <div class="input-group">
+          <label>Email (optional)</label>
+          <input type="email" id="email" class="input-field" placeholder="name@example.com">
         </div>
         <div class="input-group">
           <label>Marital Status</label>
@@ -167,6 +166,23 @@
             <option value="Single">Single</option>
             <option value="Married">Married</option>
           </select>
+        </div>
+        <div class="input-group full-width">
+          <label>Bai'at Type</label>
+          <div class="baiat-type-group">
+            <div class="baiat-type-option">
+              <input type="radio" id="baiatBorn" name="baiatType" value="Born" onchange="toggleBaiatDateField()">
+              <label for="baiatBorn">Born Ahmadi</label>
+            </div>
+            <div class="baiat-type-option">
+              <input type="radio" id="baiatEntered" name="baiatType" value="Entered" onchange="toggleBaiatDateField()">
+              <label for="baiatEntered">Entered Ahmadiyyat</label>
+            </div>
+          </div>
+        </div>
+        <div class="input-group" id="dateOfBaiatGroup" style="display:none;">
+          <label>Date of Bai'at</label>
+          <input type="date" id="dateOfBaiat" class="input-field">
         </div>
         <div class="section-title" style="margin-top:10px;"><i class="fas fa-briefcase"></i> Profession & Education</div>
         <div class="input-group">
@@ -356,6 +372,20 @@
           window.tempImageData = null;
         }
       });
+      // === TOGGLE BAI'AT DATE FIELD ===
+      window.toggleBaiatDateField = function() {
+        const bornRadio = document.getElementById('baiatBorn');
+        const dateGroup = document.getElementById('dateOfBaiatGroup');
+        const dateInput = document.getElementById('dateOfBaiat');
+        if (bornRadio && bornRadio.checked) {
+          dateGroup.style.display = 'none';
+          dateInput.value = '';
+          dateInput.required = false;
+        } else {
+          dateGroup.style.display = 'block';
+          dateInput.required = false;
+        }
+      };
       window.generateMemberId = async function() {
         const regionId = regionSelect.value, subregionId = qiadatSelect.value;
         if (!regionId || !subregionId) { memberIdDisplay.textContent = '----'; return; }
@@ -445,6 +475,9 @@
           const selectedSubregion = subregions.find(s => s.id === qiadat);
           const maritalStatusVal = document.getElementById('maritalStatus').value;
           const educationLevelVal = document.getElementById('educationLevel').value;
+          // Get Bai'at Type
+          const baiatBorn = document.getElementById('baiatBorn');
+          const baiatType = baiatBorn && baiatBorn.checked ? 'Born' : (document.getElementById('baiatEntered') && document.getElementById('baiatEntered').checked ? 'Entered' : null);
           const memberData = {
             member_id: generatedMemberId, full_name: fullName, dob: dob, date_of_birth: dob,
             date_joined: new Date().toISOString().split('T')[0],
@@ -458,7 +491,8 @@
             profile_picture: capturedImageData, photo_url: capturedImageData,
             father_name: document.getElementById('fatherName').value || null,
             wasiyyat_number: document.getElementById('wasiyyatNumber').value || null,
-            date_of_baiat: document.getElementById('dateOfBaiat').value || null,
+            date_of_baiat: baiatType === 'Born' ? null : (document.getElementById('dateOfBaiat').value || null),
+            baiat_type: baiatType,
             marital_status: maritalStatusVal === 'Minor' ? 'Minor' : (maritalStatusVal || null),
             profession_category: document.getElementById('professionCategory').value || null,
             profession_detail: document.getElementById('professionDetail').value || null,
@@ -473,13 +507,15 @@
           memberIdDisplay.textContent = '----'; savePhotoBtn.style.display = 'none'; photoHint.textContent = '';
           document.getElementById('ageHintText').innerText = 'Enter birth date to see age group';
           document.querySelector('#ageHint i').className = 'fas fa-child';
+          document.getElementById('dateOfBaiatGroup').style.display = 'none';
+          document.getElementById('baiatBorn').checked = false;
+          document.getElementById('baiatEntered').checked = false;
           await loadRegions(); qiadatSelect.innerHTML = '<option value="">Select region first</option>'; qiadatSelect.disabled = true;
           document.getElementById('professionCategory').value = '';
           document.getElementById('professionDetail').innerHTML = '<option value="">Select Category First</option>';
           document.getElementById('professionDetail').disabled = true;
           document.getElementById('fatherName').value = '';
           document.getElementById('wasiyyatNumber').value = '';
-          document.getElementById('dateOfBaiat').value = '';
           document.getElementById('maritalStatus').value = '';
           document.getElementById('educationLevel').value = '';
         } catch (err) { console.error('Registration error:', err); alert('Registration failed: ' + err.message); }
