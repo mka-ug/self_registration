@@ -4,23 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Khuddam • Uganda Self Registration</title>
-  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f2f5f9 0%, #e8ecf2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
-    :root { --uganda-black: #1C1C1C; --uganda-yellow: #FFD700; --uganda-red: #000000; --uganda-blue: #000000; --khuddam-gold: #FFD700; }
+    :root { --uganda-black: #1C1C1C; --uganda-yellow: #FFD700; --uganda-red: #E50000; --uganda-blue: #003580; --khuddam-gold: #FFD700; }
     .register-card { max-width: 520px; width: 100%; background: white; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
     .flag-stripe { display: flex; height: 6px; }
     .stripe-black { flex: 1; background: #1C1C1C; }
-    .stripe-yellow { flex: 1; background: #000000; }
-    .stripe-red { flex: 1; background: #000000; }
+    .stripe-yellow { flex: 1; background: #FFD700; }
+    .stripe-red { flex: 1; background: #E50000; }
     .stripe-black2 { flex: 1; background: #1C1C1C; }
-    .stripe-yellow2 { flex: 1; background: #000000; }
-    .stripe-red2 { flex: 1; background: #000000; }
+    .stripe-yellow2 { flex: 1; background: #FFD700; }
+    .stripe-red2 { flex: 1; background: #E50000; }
     .card-header { background: var(--uganda-black); padding: 20px 24px 16px; color: white; position: relative; }
     .card-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #FFD700, #E50000, #E50000, #FFD700); }
     .logo-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
@@ -88,12 +86,10 @@
 </head>
 <body>
   <div class="register-card">
-    <!-- Ugandan flag stripes -->
     <div class="flag-stripe">
       <div class="stripe-black"></div><div class="stripe-yellow"></div><div class="stripe-red"></div>
       <div class="stripe-black2"></div><div class="stripe-yellow2"></div><div class="stripe-red2"></div>
     </div>
-
     <div class="card-header">
       <div class="logo-wrap">
         <div class="logo-image">
@@ -108,9 +104,7 @@
         <i class="fas fa-fingerprint"></i> New Khuddam • Register Now <span class="crane-icon">🇺🇬</span>
       </div>
     </div>
-
     <div class="card-body">
-      <!-- Profile Photo Section -->
       <div class="photo-section">
         <div class="photo-preview" id="photoPreview"><i class="fas fa-user-circle"></i></div>
         <div class="photo-actions">
@@ -128,77 +122,65 @@
         <button type="button" class="save-btn" id="savePhotoBtn" style="display:none;"><i class="fas fa-save"></i> ✓ Use This Photo</button>
         <div class="photo-hint" id="photoHint"></div>
       </div>
-
-      <!-- Registration Form -->
       <form id="regForm">
         <div class="section-title"><i class="fas fa-user-pen"></i> Personal Details</div>
-
         <div class="input-group">
           <label>Full Name *</label>
           <input type="text" id="fullName" class="input-field" placeholder="As per ID card" required>
         </div>
-
-        <!-- NEW: Son of (Father's Name) -->
         <div class="input-group">
           <label>Son of (Father's Name)</label>
           <input type="text" id="fatherName" class="input-field" placeholder="Enter father's name">
         </div>
-
-        <!-- NEW: Wasiyyat Number -->
         <div class="input-group">
           <label>Wasiyyat Number</label>
           <input type="text" id="wasiyyatNumber" class="input-field" placeholder="Enter your unique Wasiyyat number">
         </div>
-
         <div class="row-2col">
           <div class="input-group">
             <label>Date of Birth *</label>
             <input type="date" id="dob" class="input-field" required onchange="updateAgeHint()">
           </div>
           <div class="input-group">
-            <label>Phone</label>
-            <input type="tel" id="phone" class="input-field" placeholder="07X XXX XXXX">
+            <label>Date of Bai'at</label>
+            <input type="date" id="dateOfBaiat" class="input-field">
           </div>
         </div>
-
         <div class="age-hint" id="ageHint">
           <i class="fas fa-child"></i><span id="ageHintText">Enter birth date to see age group</span>
         </div>
-
-        <div class="input-group">
-          <label>Email (optional)</label>
-          <input type="email" id="email" class="input-field" placeholder="name@example.com">
+        <div class="row-2col">
+          <div class="input-group">
+            <label>Phone</label>
+            <input type="tel" id="phone" class="input-field" placeholder="07X XXX XXXX">
+          </div>
+          <div class="input-group">
+            <label>Email (optional)</label>
+            <input type="email" id="email" class="input-field" placeholder="name@example.com">
+          </div>
         </div>
-
-        <!-- Marital Status with "None" option -->
         <div class="input-group">
           <label>Marital Status</label>
           <select id="maritalStatus" class="input-field">
             <option value="">Select Status</option>
-            <option value="None">None</option>
+            <option value="Minor">Minor</option>
             <option value="Single">Single</option>
             <option value="Married">Married</option>
           </select>
         </div>
-
-        <!-- Profession Cascading Dropdowns -->
         <div class="section-title" style="margin-top:10px;"><i class="fas fa-briefcase"></i> Profession & Education</div>
-        
         <div class="input-group">
           <label>Profession Category *</label>
           <select id="professionCategory" class="input-field" required onchange="loadProfessionDetails()">
             <option value="">Select Category</option>
           </select>
         </div>
-
         <div class="input-group">
           <label>Profession Detail *</label>
           <select id="professionDetail" class="input-field" required disabled>
             <option value="">Select Category First</option>
           </select>
         </div>
-
-        <!-- Education Level with "None" option -->
         <div class="input-group">
           <label>Highest Education Level</label>
           <select id="educationLevel" class="input-field">
@@ -211,9 +193,7 @@
             <option value="PhD">PhD</option>
           </select>
         </div>
-
         <div class="section-title" style="margin-top:10px;"><i class="fas fa-location-dot"></i> Location & Unit</div>
-
         <div class="row-2col">
           <div class="input-group">
             <label>Region *</label>
@@ -228,7 +208,6 @@
             </select>
           </div>
         </div>
-
         <div class="id-preview" id="memberIdPreview">
           <i class="fas fa-id-card"></i>
           <div>
@@ -236,20 +215,16 @@
             <span class="id-value" id="memberIdDisplay">----</span>
           </div>
         </div>
-
         <div class="input-group">
           <label>Home Address</label>
           <input type="text" id="address" class="input-field" placeholder="Street, city">
         </div>
-
         <div class="terms">
           <input type="checkbox" id="consent" required>
           <label for="consent">I confirm the information is accurate and I agree to abide by the rules of Khuddam-ul-Ahmadiyya Uganda.</label>
         </div>
-
         <button type="submit" class="submit-btn" id="submitBtn"><i class="fas fa-paper-plane"></i> Register Myself 🇺🇬</button>
       </form>
-
       <div class="footer-note">
         <i class="fas fa-shield-alt"></i> Your data is secure & confidential<br>
         © <span id="year">2026</span> • Help: <a href="mailto:info@khuddamuganda.org">info@khuddamuganda.org</a>
@@ -257,8 +232,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Success Modal -->
   <div class="success-modal" id="successModal">
     <div class="modal-card">
       <div class="modal-icon"><i class="fas fa-check"></i></div>
@@ -270,17 +243,12 @@
       <button class="btn-done" id="doneBtn"><i class="fas fa-thumbs-up"></i> Done</button>
     </div>
   </div>
-
   <script>
     (function() {
       'use strict';
-
-      // === SUPABASE CONFIG ===
       const SUPABASE_URL = "https://pqrsljahrnjgkadflbmr.supabase.co";
       const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxcnNsamFocm5qZ2thZGZsYm1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1NTg0NTYsImV4cCI6MjA4NjEzNDQ1Nn0.egED0C2iRp6j3Xp4ldgrdI0GBep2J7VUR52rBbzsVdo";
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { db: { schema: 'public' }, auth: { persistSession: false } });
-
-      // === PROFESSION OPTIONS (CASCADING) ===
       const PROFESSION_OPTIONS = {
         "Student": ["Primary (P1-P7)", "O-Level (S1-S4)", "A-Level (S5-S6)", "Tertiary (Year 1-3)", "University (Undergraduate)", "University (Graduate)", "University (Postgraduate)"],
         "Agriculture & Agribusiness": ["Farmer", "Agribusiness Manager", "Agronomist"],
@@ -298,11 +266,7 @@
         "Creative & Professional Services": ["Architect", "Journalist", "Designer", "Author"],
         "Regulated/Skilled Trades": ["Electrician", "Plumber", "Carpenter", "Builder"]
       };
-
-      // State
       let regions = [], subregions = [], capturedImageData = null, generatedMemberId = '', stream = null;
-
-      // DOM Elements
       const photoPreview = document.getElementById('photoPreview');
       const openCameraBtn = document.getElementById('openCameraBtn');
       const cameraContainer = document.getElementById('cameraContainer');
@@ -321,17 +285,12 @@
       const regForm = document.getElementById('regForm');
       const memberIdDisplay = document.getElementById('memberIdDisplay');
       const successMemberId = document.getElementById('successMemberId');
-
       document.getElementById('year').textContent = new Date().getFullYear();
-
-      // === HELPER: Get prefix from name ===
       function getPrefixFromName(name) {
         if (!name) return 'XX';
         const clean = name.replace(/[^a-zA-Z]/g, '').toUpperCase();
         return clean.substring(0, 2).padEnd(2, 'X');
       }
-
-      // === CAMERA FUNCTIONS ===
       async function startCamera() {
         try {
           stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
@@ -356,8 +315,6 @@
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         return canvas.toDataURL('image/jpeg', 0.9);
       }
-
-      // === CAMERA EVENT HANDLERS ===
       openCameraBtn.addEventListener('click', async () => {
         cameraContainer.classList.add('show');
         photoHint.textContent = 'Starting camera...';
@@ -365,7 +322,6 @@
         if (!started) { cameraContainer.classList.remove('show'); photoHint.textContent = ''; }
         else photoHint.textContent = 'Camera ready - click "Take Picture" when ready';
       });
-
       captureBtn.addEventListener('click', () => {
         const picture = capturePhoto();
         if (picture) {
@@ -377,10 +333,8 @@
           photoHint.textContent = 'Click "Use This Photo" to confirm';
         } else alert('Could not capture photo. Please try again.');
       });
-
       closeCameraBtn.addEventListener('click', () => { stopCamera(); cameraContainer.classList.remove('show'); photoHint.textContent = ''; });
       uploadBtn.addEventListener('click', () => fileInput.click());
-      
       fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0]; if (!file) return;
         const reader = new FileReader();
@@ -393,7 +347,6 @@
         };
         reader.readAsDataURL(file);
       });
-
       savePhotoBtn.addEventListener('click', () => {
         if (window.tempImageData) {
           capturedImageData = window.tempImageData;
@@ -403,8 +356,6 @@
           window.tempImageData = null;
         }
       });
-
-      // === GENERATE MEMBER ID ===
       window.generateMemberId = async function() {
         const regionId = regionSelect.value, subregionId = qiadatSelect.value;
         if (!regionId || !subregionId) { memberIdDisplay.textContent = '----'; return; }
@@ -422,8 +373,6 @@
           memberIdDisplay.textContent = generatedMemberId;
         } catch (err) { console.error('Error generating member ID:', err); memberIdDisplay.textContent = 'Error'; }
       };
-
-      // === LOAD REGIONS ===
       async function loadRegions() {
         try {
           regionSelect.innerHTML = '<option value="">Loading regions...</option>';
@@ -439,8 +388,6 @@
           alert('Failed to load regions. Please refresh.');
         }
       }
-
-      // === LOAD SUBREGIONS ===
       window.loadSubregions = async function() {
         const regionId = regionSelect.value;
         if (!regionId) { qiadatSelect.innerHTML = '<option value="">Select region first</option>'; qiadatSelect.disabled = true; memberIdDisplay.textContent = '----'; return; }
@@ -454,8 +401,6 @@
           qiadatSelect.innerHTML = options; qiadatSelect.disabled = false; memberIdDisplay.textContent = '----';
         } catch (err) { console.error('Error loading subregions:', err); qiadatSelect.innerHTML = '<option value="">Error loading</option>'; qiadatSelect.disabled = false; }
       };
-
-      // === LOAD PROFESSION DETAILS (CASCADING) ===
       window.loadProfessionDetails = function() {
         const category = document.getElementById('professionCategory').value;
         const detailSel = document.getElementById('professionDetail');
@@ -465,8 +410,6 @@
         const options = PROFESSION_OPTIONS[category] || [];
         options.forEach(opt => { detailSel.innerHTML += `<option value="${opt}">${opt}</option>`; });
       };
-
-      // === AGE CALCULATION ===
       window.updateAgeHint = function() {
         const dob = document.getElementById('dob').value;
         const hintSpan = document.getElementById('ageHintText');
@@ -484,8 +427,6 @@
         hintSpan.innerText = `${age} years • ${group}`; icon.className = iconClass;
         return age;
       };
-
-      // === FORM SUBMISSION ===
       regForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fullName = document.getElementById('fullName').value.trim();
@@ -495,21 +436,15 @@
         if (!fullName || !dob || !region || !qiadat || !consent) { alert('Please fill all required fields and accept terms'); return; }
         if (!generatedMemberId || generatedMemberId === '----') { alert('Please wait for Member ID to generate'); return; }
         if (!capturedImageData) { alert('Please take or upload a photo and click "Use This Photo" to confirm'); return; }
-
         const calculatedAge = updateAgeHint();
         const isAnsarAge = calculatedAge >= 40;
         let status = 'Pending'; if (calculatedAge >= 40) status = 'Pending-Ansar';
-
         submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Registering...';
-
         try {
           const selectedRegion = regions.find(r => r.id === region);
           const selectedSubregion = subregions.find(s => s.id === qiadat);
-          
-          // Save "None" as string, not null
           const maritalStatusVal = document.getElementById('maritalStatus').value;
           const educationLevelVal = document.getElementById('educationLevel').value;
-          
           const memberData = {
             member_id: generatedMemberId, full_name: fullName, dob: dob, date_of_birth: dob,
             date_joined: new Date().toISOString().split('T')[0],
@@ -521,10 +456,10 @@
             calculated_age: calculatedAge, is_ansar_age: isAnsarAge, status: status,
             registered_via: 'self_portal',
             profile_picture: capturedImageData, photo_url: capturedImageData,
-            // NEW FIELDS - Save "None" explicitly as string
             father_name: document.getElementById('fatherName').value || null,
             wasiyyat_number: document.getElementById('wasiyyatNumber').value || null,
-            marital_status: maritalStatusVal === 'None' ? 'None' : (maritalStatusVal || null),
+            date_of_baiat: document.getElementById('dateOfBaiat').value || null,
+            marital_status: maritalStatusVal === 'Minor' ? 'Minor' : (maritalStatusVal || null),
             profession_category: document.getElementById('professionCategory').value || null,
             profession_detail: document.getElementById('professionDetail').value || null,
             education_level: educationLevelVal === 'None' ? 'None' : (educationLevelVal || null),
@@ -539,25 +474,20 @@
           document.getElementById('ageHintText').innerText = 'Enter birth date to see age group';
           document.querySelector('#ageHint i').className = 'fas fa-child';
           await loadRegions(); qiadatSelect.innerHTML = '<option value="">Select region first</option>'; qiadatSelect.disabled = true;
-          // Reset profession dropdowns
           document.getElementById('professionCategory').value = '';
           document.getElementById('professionDetail').innerHTML = '<option value="">Select Category First</option>';
           document.getElementById('professionDetail').disabled = true;
-          // Reset new fields
           document.getElementById('fatherName').value = '';
           document.getElementById('wasiyyatNumber').value = '';
+          document.getElementById('dateOfBaiat').value = '';
           document.getElementById('maritalStatus').value = '';
           document.getElementById('educationLevel').value = '';
         } catch (err) { console.error('Registration error:', err); alert('Registration failed: ' + err.message); }
         finally { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Register Myself 🇺🇬'; }
       });
-
       doneBtn.addEventListener('click', () => successModal.classList.remove('show'));
       successModal.addEventListener('click', (e) => { if (e.target === successModal) successModal.classList.remove('show'); });
-
-      // === INIT ===
       async function init() {
-        // Populate Profession Categories
         const profCatSel = document.getElementById('professionCategory');
         let profOpts = '<option value="">Select Category</option>';
         Object.keys(PROFESSION_OPTIONS).forEach(cat => { profOpts += `<option value="${cat}">${cat}</option>`; });
