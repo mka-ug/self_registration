@@ -13,16 +13,16 @@
     :root { --uganda-black: #1C1C1C; --uganda-yellow: #FFD700; --uganda-red: #000000; --uganda-blue: #000000; --khuddam-gold: #FFD700; }
     .register-card { max-width: 520px; width: 100%; background: white; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
     .flag-stripe { display: flex; height: 6px; }
-    .stripe-black { flex: 1; background: #1C1C1C; }
+    .stripe-black { flex: 1; background: #000000; }
     .stripe-yellow { flex: 1; background: #000000; }
     .stripe-red { flex: 1; background: #000000; }
-    .stripe-black2 { flex: 1; background: #1C1C1C; }
+    .stripe-black2 { flex: 1; background: #000000; }
     .stripe-yellow2 { flex: 1; background: #000000; }
     .stripe-red2 { flex: 1; background: #000000; }
     .card-header { background: var(--uganda-black); padding: 20px 24px 16px; color: white; position: relative; }
     .card-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #FFD700, #E50000, #E50000, #FFD700); }
     .logo-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
-    .logo-image { width: 70px; height: 70px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 3px solid #FFD700; flex-shrink: 0; }
+    .logo-image { width: 70px; height: 70px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 3px solid #000000; flex-shrink: 0; }
     .logo-image img { width: 100%; height: 100%; object-fit: cover; }
     .logo-text { font-weight: 700; font-size: 1.1rem; line-height: 1.3; }
     .logo-text small { display: block; font-size: 0.7rem; font-weight: 400; opacity: 0.85; letter-spacing: 0.3px; }
@@ -69,8 +69,61 @@
     .submit-btn { width: 100%; background: linear-gradient(90deg, var(--uganda-black), #2d2d2d, var(--uganda-black)); color: white; border: none; padding: 16px; border-radius: 40px; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 16px -4px rgba(0,0,0,0.3); border: 1px solid #FFD700; }
     .submit-btn:hover { transform: translateY(-1px); }
     .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .footer-note { text-align: center; margin-top: 18px; color: #64748b; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
-    .footer-note a { color: var(--uganda-blue); text-decoration: none; font-weight: 600; }
+    
+    /* ========== FIXED FOOTER STYLES ========== */
+    .footer-note {
+      text-align: center;
+      margin-top: 18px;
+      color: #64748b;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 0 8px;
+      line-height: 1.4;
+    }
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .footer-note i {
+      color: var(--uganda-blue);
+      font-size: 0.85rem;
+    }
+    .footer-divider {
+      color: #94a3b8;
+      font-weight: 400;
+      margin: 0 2px;
+    }
+    .footer-note a {
+      color: var(--uganda-blue);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .footer-note a:hover {
+      color: #002855;
+      text-decoration: underline;
+    }
+    .footer-emoji {
+      font-size: 0.7rem;
+      opacity: 0.9;
+      gap: 4px;
+    }
+    .footer-emoji span {
+      color: #083e3e9e;
+    }
+    /* Mobile refinement */
+    @media (max-width: 480px) {
+      .footer-note { font-size: 0.7rem; gap: 4px; }
+      .footer-row { gap: 4px; }
+    }
+    /* ========== END FOOTER STYLES ========== */
+    
     .success-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; padding: 16px; z-index: 1000; backdrop-filter: blur(4px); }
     .success-modal.show { display: flex; }
     .modal-card { background: white; border-radius: 32px; max-width: 340px; padding: 32px 20px; text-align: center; box-shadow: 0 25px 40px rgba(0,0,0,0.25); border: 3px solid #FFD700; }
@@ -81,7 +134,6 @@
     .btn-done:hover { background: #002855; }
     .hidden { display: none; }
     .photo-hint { font-size: 0.75rem; color: #64748b; margin-top: 6px; font-style: italic; min-height: 1.2em; }
-    /* Bai'at Type Radio Buttons */
     .baiat-type-group { display: flex; gap: 20px; padding: 10px 0; }
     .baiat-type-option { display: flex; align-items: center; gap: 8px; cursor: pointer; }
     .baiat-type-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--uganda-blue); cursor: pointer; }
@@ -167,6 +219,16 @@
             <option value="Married">Married</option>
           </select>
         </div>
+        <div class="input-group">
+          <label>Employment Status</label>
+          <select id="employmentStatus" class="input-field">
+            <option value="">Select Status</option>
+            <option value="Self Employed">Self Employed</option>
+            <option value="Employed">Employed</option>
+            <option value="Waqf work">Waqf work</option>
+            <option value="Unemployed">Unemployed</option>
+          </select>
+        </div>
         <div class="input-group full-width">
           <label>Bai'at Type</label>
           <div class="baiat-type-group">
@@ -176,7 +238,7 @@
             </div>
             <div class="baiat-type-option">
               <input type="radio" id="baiatEntered" name="baiatType" value="Entered" onchange="toggleBaiatDateField()">
-              <label for="baiatEntered">Converted to Ahmadiyyat</label>
+              <label for="baiatEntered">Entered Ahmadiyyat</label>
             </div>
           </div>
         </div>
@@ -241,11 +303,26 @@
         </div>
         <button type="submit" class="submit-btn" id="submitBtn"><i class="fas fa-paper-plane"></i> Register Myself 🇺🇬</button>
       </form>
+      
+      <!-- ========== FIXED FOOTER ========== -->
       <div class="footer-note">
-        <i class="fas fa-shield-alt"></i> Your data is secure & confidential<br>
-        © <span id="year">2026</span> • Help: <a href="mailto:info@khuddamuganda.org">info@khuddamuganda.org</a>
-        <i class="fas fa-crean" style="color:#E50000;"> 🦩</i>
+        <div class="footer-row">
+          <i class="fas fa-shield-alt"></i>
+          <span>Your data is secure & confidential</span>
+        </div>
+        <div class="footer-row">
+          <span>© <span id="year">2026</span></span>
+          <span class="footer-divider">•</span>
+          <span>Help: <a href="mailto:info@khuddamuganda.org">info@khuddamuganda.org</a></span>
+        </div>
+        <div class="footer-row footer-emoji">
+          <span>🦩</span>
+          <span>Welcome to MKA Uganda</span>
+          <span>🦩</span>
+        </div>
       </div>
+      <!-- ========== END FOOTER ========== -->
+      
     </div>
   </div>
   <div class="success-modal" id="successModal">
@@ -271,7 +348,7 @@
         "Transport & Logistics": ["Boda Boda Rider", "Taxi Driver", "Heavy Truck Driver"],
         "Health Care": ["Doctor", "Nurse", "Midwife", "Lab Tech", "Dentist", "Physiotherapist", "Veterinarian", "Pharmacist"],
         "Trade & Services": ["Sales Agent", "Retailer", "Wholesaler"],
-        "Education & Social Services": ["Teacher", "Instructor", "Professor", "Social Worker", "Counselor"],
+        "Education & Social Services": ["Teacher", "Instructor", "Professor", "Social Worker", "Counselor", "Religious (Missionary)"],
         "Legal & Finance": ["Lawyer", "Accountant", "Banker", "Financial Analyst"],
         "Office Administrator and Customer Care": ["Office Administrator", "Customer Care Representative"],
         "Information Technology (IT)": ["Software Developer", "Data Analyst", "Cybersecurity Specialist", "Virtual Assistant", "Digital Marketing Specialist"],
@@ -372,7 +449,6 @@
           window.tempImageData = null;
         }
       });
-      // === TOGGLE BAI'AT DATE FIELD ===
       window.toggleBaiatDateField = function() {
         const bornRadio = document.getElementById('baiatBorn');
         const dateGroup = document.getElementById('dateOfBaiatGroup');
@@ -475,7 +551,6 @@
           const selectedSubregion = subregions.find(s => s.id === qiadat);
           const maritalStatusVal = document.getElementById('maritalStatus').value;
           const educationLevelVal = document.getElementById('educationLevel').value;
-          // Get Bai'at Type
           const baiatBorn = document.getElementById('baiatBorn');
           const baiatType = baiatBorn && baiatBorn.checked ? 'Born' : (document.getElementById('baiatEntered') && document.getElementById('baiatEntered').checked ? 'Entered' : null);
           const memberData = {
@@ -494,6 +569,7 @@
             date_of_baiat: baiatType === 'Born' ? null : (document.getElementById('dateOfBaiat').value || null),
             baiat_type: baiatType,
             marital_status: maritalStatusVal === 'Minor' ? 'Minor' : (maritalStatusVal || null),
+            employment_status: document.getElementById('employmentStatus').value || null,
             profession_category: document.getElementById('professionCategory').value || null,
             profession_detail: document.getElementById('professionDetail').value || null,
             education_level: educationLevelVal === 'None' ? 'None' : (educationLevelVal || null),
@@ -517,6 +593,7 @@
           document.getElementById('fatherName').value = '';
           document.getElementById('wasiyyatNumber').value = '';
           document.getElementById('maritalStatus').value = '';
+          document.getElementById('employmentStatus').value = '';
           document.getElementById('educationLevel').value = '';
         } catch (err) { console.error('Registration error:', err); alert('Registration failed: ' + err.message); }
         finally { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Register Myself 🇺🇬'; }
